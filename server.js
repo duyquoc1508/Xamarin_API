@@ -1,0 +1,57 @@
+require('dotenv').config();
+const express = require('express');
+const app = express();
+const mongoose = require('mongoose');
+const bodyParser = require('body-parser');
+const jwt = require('jsonwebtoken')
+const port = process.env.PORT || 3000;
+const secret = process.env.SECRET;
+const database = require('./database');
+const userRoute = require('./api/routes/userRoute');
+const postRoute = require('./api/routes/postRoute');
+
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
+
+mongoose
+  .connect(database.name, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true
+  })
+  .then(() => console.log('Connected to database'))
+  .catch(error => console.log(error));
+
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json());
+
+app.use(express.static('public'))
+
+/**
+ * middleware run first
+ */
+app.use((req, res, next) => {
+  if (req.headers && req.headers.authorization) {
+    jwt.verify(req.headers.authorization, secret, (err, decoded) => {
+      if (err) req.user = undefined;
+      req.user = decoded;
+      next();
+    });
+  } else {
+    req.user = undefined;
+    next();
+  }
+});
+
+//use route user
+app.use('/auth', userRoute);
+
+//user route post
+app.use('/post', postRoute);
+
+app.use((req, res) => {
+  res.status(404).send({ url: req.originalUrl + ' not found.' })
+});
+
+app.listen(port, () => {
+  console.log(`Server running at ${port}`);
+});
