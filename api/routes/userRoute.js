@@ -2,7 +2,6 @@ const express = require('express');
 const Router = express.Router();
 const userController = require('../controllers/userController')
 const multer = require('multer');
-const sharp = require('sharp')
 
 var storage = multer.diskStorage({
   // file upload destination
@@ -16,21 +15,27 @@ var storage = multer.diskStorage({
 var upload = multer({ storage: storage });
 
 /**
+ * get user profile
+ * @link http://localhost:3000/auth/profile
+ */
+Router.get('/profile', userController.loginRequired, userController.getUserProfile)
+
+/**
  * register new user
- * @link https://localhost:3000/auth/register
+ * @link http://localhost:3000/auth/register
  */
 Router.post('/register', userController.register);
 
 /**
  * login
- * @link https://localhost:3000/auth/login
+ * @link http://localhost:3000/auth/login
  * @returns tokens
  */
 Router.post('/login', userController.login);
 
 /**
  * update user profile
- * @link https://localhost:3000/auth/update
+ * @link http://localhost:3000/auth/update
  */
 Router.put('/update', upload.single('image'), userController.loginRequired, userController.update);
 

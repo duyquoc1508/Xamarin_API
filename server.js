@@ -3,9 +3,10 @@ const express = require('express');
 const app = express();
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
-const jwt = require('jsonwebtoken')
+const jwt = require('jsonwebtoken');
+const logger = require('morgan');
 const port = process.env.PORT || 3000;
-const secret = process.env.SECRET;
+const secret = process.env.SECRET || 'p76t8$-H/EC8*Gj#';
 const database = require('./database');
 const userRoute = require('./api/routes/userRoute');
 const postRoute = require('./api/routes/postRoute');
@@ -21,6 +22,7 @@ mongoose
   .then(() => console.log('Connected to database'))
   .catch(error => console.log(error));
 
+app.use(logger('dev'));
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 

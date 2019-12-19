@@ -11,19 +11,15 @@ const UserSchema = new Schema({
   username: {
     type: String,
     trim: true,
-    required: [true, 'Full name is required']
+    required: [true, 'Username is required!']
   },
-  // name: {
-  //   type: String,
-  //   default: null
-  // },
   email: {
     type: String,
-    unique: true,
+    unique: [true, 'Email address is already!'],
     lowercase: true,
     trim: true,
-    required: [true, 'Email is required'],
-    validators: [validateEmail, "Email is invalid"]
+    required: [true, 'Email is required!'],
+    validators: [validateEmail, "Email is invalid!"]
   },
   hash_password: {
     type: String,
@@ -38,15 +34,8 @@ const UserSchema = new Schema({
   }
 });
 
-
-
 UserSchema.methods.comparePassword = function (password) {
   return bcrypt.compareSync(password, this.hash_password);
 }
-
-// UserSchema.pre('save', function (next) {
-//   this.name = this.username;
-//   return next();
-// })
 
 module.exports = mongoose.model('User', UserSchema);

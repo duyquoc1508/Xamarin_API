@@ -16,17 +16,16 @@ var storage = multer.diskStorage({
 var upload = multer({ storage: storage });
 
 /**
- * get all posts of user
- * @link https://localhost:300/{userId}
- * @param {String} userId
- */
-Router.get('/:userId', postController.getAllPostOfUser)
-
-/**
  * get all posts of all user
  * @link http://localhost:3000/post
  */
-Router.get('/', postController.getAllPosts)
+Router.get('/', userHandlers.loginRequired, postController.getAllPosts)
+
+/**
+ * get all posts of mine
+ * @link http://localhost:3000/post/timeline
+ */
+Router.get('/timeline', userHandlers.loginRequired, postController.getAllPostOfUser);
 
 /**
  * create new post
@@ -47,8 +46,5 @@ Router.put('/:postId', userHandlers.loginRequired, postController.likePost);
  * @param {String} postId
  */
 Router.delete('/:postId', userHandlers.loginRequired, postController.deletePost);
-
-
-
 
 module.exports = Router
