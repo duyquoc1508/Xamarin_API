@@ -3,14 +3,8 @@ const fs = require('fs')
 
 module.exports = {
   createPost: async (req, res) => {
-    const post = {
-      status: req.body.status,
-      user_id: req.user._id
-    }
-    if (req.file) {
-      //if exists file => update file
-      post.image = req.file.filename;
-    }
+    const post = req.body;
+    post.user_id = req.user._id;
     try {
       const newPost = await Post.create(post);
       return res.status(201).json(newPost);
@@ -26,8 +20,8 @@ module.exports = {
       if (req.user._id !== post.user_id) {
         return res.status(403).send({ message: 'Access denied!' })
       }
-      if (post.image) {
-        fs.unlinkSync(`./public/images/${post.image}`);
+      if (post.image !== "avt_default.png") {
+        fs.unlinkSync(`./public/upload/${post.image}`);
       }
       await Post.findByIdAndDelete(req.params.postId);
       res.status(200).send({ message: 'Delete sucessfully!' })

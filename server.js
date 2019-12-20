@@ -8,8 +8,7 @@ const logger = require('morgan');
 const port = process.env.PORT || 3000;
 const secret = process.env.SECRET || 'p76t8$-H/EC8*Gj#';
 const database = require('./database');
-const userRoute = require('./api/routes/userRoute');
-const postRoute = require('./api/routes/postRoute');
+const api = require('./api');
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -44,11 +43,7 @@ app.use((req, res, next) => {
   }
 });
 
-//use route user
-app.use('/auth', userRoute);
-
-//user route post
-app.use('/post', postRoute);
+app.use('/api', api);
 
 app.use((req, res) => {
   res.status(404).send({ url: req.originalUrl + ' not found.' })

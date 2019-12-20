@@ -25,7 +25,7 @@ module.exports = {
         //input validation failure: 400 Bad Request
         return res.status(400).send({ message: 'This email is already taken!' })
       }
-      res.status(500).json({ message: error });
+      res.status(500).json({ message: error.message });
     }
   },
 
@@ -53,21 +53,17 @@ module.exports = {
   },
 
   update: async (req, res) => {
-    let newUser = {
-      username: req.body.username
-    };
+    let newUser = req.body;
     if (req.body.password) {
       newUser.hash_password = bcrypt.hashSync(req.body.password, 10);
     }
-    if (req.file) {
-      //if exists file => update file
-      newUser.avatar = req.file.filename;
-    }
     try {
-      if (req.body.email && validateEmail(req.body.email)) {
-        newUser.email = req.body.email;
-      } else {
-        return res.status(400).send({ message: 'Email invalid.' });
+      if (req.body.email) {
+        if (!validation(req.body.email)) {
+          return res.status(400).send({ message: 'Email invalid.' })
+        } else {
+          newUser.email = req.body.email;
+        }
       }
       await User.findByIdAndUpdate({ _id: req.user._id }, newUser);
       res.status(200).send({ message: 'Update user successfully!' });

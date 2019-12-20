@@ -1,19 +1,7 @@
 const express = require('express');
 const Router = express.Router();
 const userHandlers = require('../controllers/userController');
-const postController = require('../controllers/postController')
-const multer = require('multer');
-
-var storage = multer.diskStorage({
-  // file upload destination
-  destination: function (req, file, callback) {
-    callback(null, './public/images');
-  },
-  filename: function (req, file, callback) {
-    callback(null, 'post-' + Date.now() + '-' + file.originalname);
-  }
-});
-var upload = multer({ storage: storage });
+const postController = require('../controllers/postController');
 
 /**
  * get all posts of all user
@@ -31,7 +19,7 @@ Router.get('/timeline', userHandlers.loginRequired, postController.getAllPostOfU
  * create new post
  * @link http://localhost:3000/post
  */
-Router.post('/', userHandlers.loginRequired, upload.single('image'), postController.createPost);
+Router.post('/', userHandlers.loginRequired, postController.createPost);
 
 /**
  * like for post
@@ -42,7 +30,7 @@ Router.put('/:postId', userHandlers.loginRequired, postController.likePost);
 
 /**
  * delete post
- * @link http://localhost:3000/{postId}
+ * @link http://localhost:3000/post/{postId}
  * @param {String} postId
  */
 Router.delete('/:postId', userHandlers.loginRequired, postController.deletePost);
