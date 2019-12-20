@@ -1,6 +1,6 @@
 const sharp = require('sharp');
 const _fit = sharp.fit;
-const uuidv4 = require('uuid').v4;
+const uuidv1 = require('uuid').v1;
 const resolve = require('path').resolve;
 
 class Resize {
@@ -22,7 +22,7 @@ class Resize {
   }
   static filename() {
     // random file name
-    return `${uuidv4()}.png`;
+    return `${uuidv1().replace(/-/g, '_')}.png`;
   }
   filepath(filename) {
     return resolve(`${this.folder}/${filename}`)
