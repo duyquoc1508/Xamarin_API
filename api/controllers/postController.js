@@ -3,7 +3,9 @@ const fs = require('fs')
 
 module.exports = {
   createPost: async (req, res) => {
-    const post = req.body;
+    const post = {
+      status: req.body.status
+    }
     post.user_id = req.user._id;
     try {
       const newPost = await Post.create(post);

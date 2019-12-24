@@ -31,6 +31,27 @@ const UserSchema = new Schema({
   avatar: {
     type: String,
     default: "avt_default.png"
+  },
+  first_name: {
+    type: String,
+  },
+  last_name: {
+    type: String,
+  },
+  birthday: {
+    type: Date,
+  },
+  address: {
+    type: String,
+  },
+  gender: {
+    type: String,
+  },
+  relationship: {
+    type: String,
+  },
+  phone: {
+    type: String,
   }
 });
 

@@ -15,6 +15,12 @@ Router.get('/profile', userController.loginRequired, userController.getUserProfi
 Router.post('/register', userController.register);
 
 /**
+ * register with fb
+ * @link http://localhost:3000/auth/login_fb
+ */
+Router.post('/login_fb', userController.loginWithFacebook);
+
+/**
  * login
  * @link http://localhost:3000/auth/login
  * @returns tokens
