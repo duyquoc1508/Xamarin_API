@@ -4,7 +4,8 @@ const fs = require('fs')
 module.exports = {
   createPost: async (req, res) => {
     const post = {
-      status: req.body.status
+      status: req.body.status,
+      image: req.body.image
     }
     post.user_id = req.user._id;
     try {
